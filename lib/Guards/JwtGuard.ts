@@ -1,12 +1,12 @@
 import { DateTime } from "luxon";
 import { v4 as uuidv4 } from "uuid";
 import { GetProviderRealUser, ProviderTokenContract, UserProviderContract } from "@ioc:Adonis/Addons/Auth";
-import { BaseGuard } from "@adonisjs/auth/build/src/Guards/Base";
+import { BaseGuard } from "@umatch/auth/build/src/Guards/Base";
 import { EmitterContract } from "@ioc:Adonis/Core/Event";
 import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import { string } from "@poppinss/utils/build/helpers";
 import { createHash } from "crypto";
-import { ProviderToken } from "@adonisjs/auth/build/src/Tokens/ProviderToken";
+import { ProviderToken } from "@umatch/auth/build/src/Tokens/ProviderToken";
 import JwtAuthenticationException from "../Exceptions/JwtAuthenticationException";
 import {
     JWTGuardConfig,

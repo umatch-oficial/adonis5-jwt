@@ -5,7 +5,7 @@ import { DateTime } from "luxon";
 import AbstractDatabaseProvider from "./AbstractDatabaseProvider";
 import { JwtProviderToken } from "../ProviderToken/JwtProviderToken";
 import { JwtProviderTokenContract, JwtProviderContract } from "@ioc:Adonis/Addons/Jwt";
-import { ProviderToken } from "@adonisjs/auth/build/src/Tokens/ProviderToken";
+import { ProviderToken } from "@umatch/auth/build/src/Tokens/ProviderToken";
 import { ProviderTokenContract } from "@ioc:Adonis/Addons/Auth";
 
 /**

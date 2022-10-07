@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { ProviderToken } from '@adonisjs/auth/build/src/Tokens/ProviderToken';
+import { ProviderToken } from '@umatch/auth/build/src/Tokens/ProviderToken';
 import { JwtProviderTokenContract } from '@ioc:Adonis/Addons/Jwt';
 /**
  * Token returned and accepted by the token providers

@@ -1,5 +1,5 @@
 /*
- * @adonisjs/auth
+ * @umatch/auth
  *
  * (c) Harminder Virk <virk@adonisjs.com>
  *
@@ -12,7 +12,7 @@ import { safeEqual, cuid } from "@poppinss/utils/build/helpers";
 import { RefreshTokenProviderContract } from "@ioc:Adonis/Addons/Jwt";
 import AbstractRedisProvider from "./AbstractRedisProvider";
 import { ProviderTokenContract } from "@ioc:Adonis/Addons/Auth";
-import { ProviderToken } from "@adonisjs/auth/build/src/Tokens/ProviderToken";
+import { ProviderToken } from "@umatch/auth/build/src/Tokens/ProviderToken";
 
 /**
  * Shape of the data persisted inside redis
@@ -26,7 +26,7 @@ type PersistedToken = {
 /**
  * Redis backed tokens provider.
  * Can't extend original TokenRedisProvider since all its methods are private,
- * so I copied it altogether from @adonisjs/auth
+ * so I copied it altogether from @umatch/auth
  */
 export default class RefreshTokenRedisProvider extends AbstractRedisProvider implements RefreshTokenProviderContract {
     /**

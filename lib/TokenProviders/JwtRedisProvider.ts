@@ -12,7 +12,7 @@ import { safeEqual, cuid } from "@poppinss/utils/build/helpers";
 import { JwtProviderTokenContract, JwtProviderContract } from "@ioc:Adonis/Addons/Jwt";
 import { JwtProviderToken } from "../ProviderToken/JwtProviderToken";
 import AbstractRedisProvider from "./AbstractRedisProvider";
-import { ProviderToken } from "@adonisjs/auth/build/src/Tokens/ProviderToken";
+import { ProviderToken } from "@umatch/auth/build/src/Tokens/ProviderToken";
 import { ProviderTokenContract } from "@ioc:Adonis/Addons/Auth";
 
 /**

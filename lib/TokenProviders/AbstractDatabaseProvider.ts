@@ -3,7 +3,7 @@
 import { DateTime } from "luxon";
 import { DatabaseContract, QueryClientContract } from "@ioc:Adonis/Lucid/Database";
 import { TokenProviderContract, ProviderTokenContract, DatabaseTokenProviderConfig } from "@ioc:Adonis/Addons/Auth";
-import { ProviderToken } from "@adonisjs/auth/build/src/Tokens/ProviderToken";
+import { ProviderToken } from "@umatch/auth/build/src/Tokens/ProviderToken";
 
 /**
  * Database backend tokens provider.

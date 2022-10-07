@@ -5,10 +5,10 @@
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "types": [
-            "@adonisjs/lucid",
-            "@adonisjs/auth",
             "@adonisjs/core",
-            "@adonisjs/redis"
+            "@adonisjs/redis",
+            "@umatch/auth",
+            "@umatch/lucid"
         ]
     }
 }

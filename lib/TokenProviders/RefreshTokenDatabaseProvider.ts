@@ -2,14 +2,14 @@
 
 import { DateTime } from "luxon";
 import { ProviderTokenContract } from "@ioc:Adonis/Addons/Auth";
-import { ProviderToken } from "@adonisjs/auth/build/src/Tokens/ProviderToken";
+import { ProviderToken } from "@umatch/auth/build/src/Tokens/ProviderToken";
 import AbstractDatabaseProvider from "./AbstractDatabaseProvider";
 import { RefreshTokenProviderContract } from "@ioc:Adonis/Addons/Jwt";
 
 /**
  * Database backend tokens provider.
  * Can't extend original TokenDatabaseProvider since all its methods are private,
- * so I copied it altogether from @adonisjs/auth
+ * so I copied it altogether from @umatch/auth
  */
 export default class RefreshTokenDatabaseProvider extends AbstractDatabaseProvider implements RefreshTokenProviderContract {
     /**

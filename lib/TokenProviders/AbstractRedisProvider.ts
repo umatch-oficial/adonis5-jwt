@@ -14,7 +14,7 @@ import {
     RedisClusterConnectionContract,
 } from "@ioc:Adonis/Addons/Redis";
 import { RedisTokenProviderConfig, TokenProviderContract } from "@ioc:Adonis/Addons/Auth";
-import { ProviderToken } from '@adonisjs/auth/build/src/Tokens/ProviderToken';
+import { ProviderToken } from '@umatch/auth/build/src/Tokens/ProviderToken';
 import { ProviderTokenContract } from "@ioc:Adonis/Addons/Auth";
 
 /**
