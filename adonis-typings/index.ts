@@ -11,13 +11,12 @@ declare module "@ioc:Adonis/Addons/Jwt" {
         GuardContract,
     } from "@ioc:Adonis/Addons/Auth";
     import { DateTime } from "luxon";
-    import { JWTPayload } from "jose/jwt/verify";
 
     export type JWTCustomPayloadData = {
         [key: string]: any;
     };
 
-    export type JWTCustomPayload = JWTPayload & {
+    export type JWTCustomPayload = { [key:string]: any } & {
         data?: JWTCustomPayloadData;
     };
 
@@ -56,14 +55,9 @@ declare module "@ioc:Adonis/Addons/Jwt" {
         audience?: string;
 
         /**
-         * Public key to sign the token
+         * Secret
          */
-        publicKey: string;
-
-        /**
-         * Private key to sign the token
-         */
-        privateKey: string;
+        secret: string;
 
         /**
          * Whether this guard should store the JWT in the selected tokenProvider.

@@ -1,14 +1,11 @@
 import { DateTime } from "luxon";
-import { SignJWT } from "jose/jwt/sign";
-import { jwtVerify } from "jose/jwt/verify";
-import { JWTExpired } from "jose/util/errors";
 import { v4 as uuidv4 } from "uuid";
 import { GetProviderRealUser, ProviderTokenContract, UserProviderContract } from "@ioc:Adonis/Addons/Auth";
 import { BaseGuard } from "@adonisjs/auth/build/src/Guards/Base";
 import { EmitterContract } from "@ioc:Adonis/Core/Event";
 import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import { string } from "@poppinss/utils/build/helpers";
-import { createHash, createPrivateKey, KeyObject } from "crypto";
+import { createHash } from "crypto";
 import { ProviderToken } from "@adonisjs/auth/build/src/Tokens/ProviderToken";
 import JwtAuthenticationException from "../Exceptions/JwtAuthenticationException";
 import {
@@ -24,6 +21,11 @@ import {
     JWTLogoutOptions,
 } from "@ioc:Adonis/Addons/Jwt";
 import { JwtProviderToken } from "../ProviderToken/JwtProviderToken";
+import * as util from 'util';
+import * as jwt from 'jsonwebtoken'
+
+const signToken = util.promisify(jwt.sign);
+const verifyToken = util.promisify(jwt.verify);
 
 /**
  * JWT token represents a persisted token generated for a given user.
@@ -99,9 +101,9 @@ export class JWTGuard extends BaseGuard<"jwt"> implements JWTGuardContract<any, 
     private tokenHash: string | undefined;
 
     /**
-     * Token type for the persistance store
+     * Token type for the persistence store
      */
-    private tokenType;
+    private readonly tokenType;
 
     /**
      * constructor of class.
@@ -141,7 +143,7 @@ export class JWTGuard extends BaseGuard<"jwt"> implements JWTGuardContract<any, 
             /**
              * Throw error when it is not an instance of the authentication
              */
-            if (!(error instanceof JwtAuthenticationException) && !(error instanceof JWTExpired)) {
+            if (!(error instanceof JwtAuthenticationException)) {
                 throw error;
             }
 
@@ -294,7 +296,7 @@ export class JWTGuard extends BaseGuard<"jwt"> implements JWTGuardContract<any, 
         /**
          * Generate a JWT and refresh token
          */
-        const tokenInfo = await this.generateTokenForPersistance(expiresIn, refreshTokenExpiresIn, payload);
+        const tokenInfo = await this.generateTokenForPersistence(expiresIn, refreshTokenExpiresIn, payload);
 
         let providerToken;
         if (!this.config.persistJwt) {
@@ -392,9 +394,9 @@ export class JWTGuard extends BaseGuard<"jwt"> implements JWTGuardContract<any, 
     }
 
     /**
-     * Generates a new access token + refresh token + hash's for the persistance.
+     * Generates a new access token + refresh token + hash's for the persistence.
      */
-    private async generateTokenForPersistance(
+    private async generateTokenForPersistence(
         expiresIn?: string | number,
         refreshTokenExpiresIn?: string | number,
         payload: any = {}
@@ -406,19 +408,17 @@ export class JWTGuard extends BaseGuard<"jwt"> implements JWTGuardContract<any, 
             refreshTokenExpiresIn = this.config.refreshTokenDefaultExpire;
         }
 
-        let accessTokenBuilder = new SignJWT({ data: payload }).setProtectedHeader({ alg: "RS256" }).setIssuedAt();
-
+        let options: {issuer?: string; audience ?: string; expiresIn?: string|number} = {};
         if (this.config.issuer) {
-            accessTokenBuilder = accessTokenBuilder.setIssuer(this.config.issuer);
+            options.issuer = this.config.issuer;
         }
         if (this.config.audience) {
-            accessTokenBuilder = accessTokenBuilder.setAudience(this.config.audience);
+            options.audience = this.config.audience;
         }
         if (expiresIn) {
-            accessTokenBuilder = accessTokenBuilder.setExpirationTime(expiresIn);
+            options.expiresIn = expiresIn;
         }
-
-        const accessToken = await accessTokenBuilder.sign(this.generateKey(this.config.privateKey));
+        const accessToken = await signToken(payload, this.config.secret, options)
         const accessTokenHash = this.generateHash(accessToken);
 
         const refreshToken = uuidv4();
@@ -432,13 +432,6 @@ export class JWTGuard extends BaseGuard<"jwt"> implements JWTGuardContract<any, 
             expiresAt: this.getExpiresAtDate(expiresIn),
             refreshTokenExpiresAt: this.getExpiresAtDate(refreshTokenExpiresIn),
         };
-    }
-
-    /**
-     * Converts key string to Buffer
-     */
-    private generateKey(hash: string): KeyObject {
-        return createPrivateKey(Buffer.from(hash));
     }
 
     /**
@@ -496,26 +489,14 @@ export class JWTGuard extends BaseGuard<"jwt"> implements JWTGuardContract<any, 
      * Verify the token received in the request.
      */
     private async verifyToken(token: string): Promise<JWTCustomPayload> {
-        const secret = this.generateKey(this.config.privateKey);
-
-        const { payload } = await jwtVerify(token, secret, {
+        const payload = await verifyToken(token, this.config.secret, {
             issuer: this.config.issuer,
             audience: this.config.audience,
         });
-
-        const { data, exp }: JWTCustomPayload = payload;
-
-        if (!data) {
-            throw new JwtAuthenticationException("Invalid JWT payload");
-        }
-        if (!data.userId) {
+        if (!payload.uid) {
             throw new JwtAuthenticationException("Invalid JWT payload: missing userId");
         }
-        if (exp && exp < Math.floor(DateTime.now().toSeconds())) {
-            throw new JwtAuthenticationException("Expired JWT token");
-        }
-
-        return payload;
+        return { data: { userId: payload.uid } };
     }
 
     /**
