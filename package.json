@@ -1,5 +1,5 @@
 {
-  "name": "adonis5-jwt",
+  "name": "@umatch/adonis5-jwt",
   "version": "1.1.7",
   "description": "",
   "types": "build/adonis-typings/index.d.ts",
@@ -21,15 +21,12 @@
     "release": "np",
     "version": "npm run build"
   },
-  "author": "Max Galbusera",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/maxgalbu/adonis5-jwt.git"
-  },
-  "homepage": "https://github.com/maxgalbu/adonis5-jwt#readme",
+  "author": "Umatch",
+  "license": "UNLICENSED",
+  "repository": "github:umatch-oficial/adonis5-jwt",
+  "homepage": "https://github.com/umatch-oficial/adonis5-jwt#readme",
   "bugs": {
-    "url": "https://github.com/maxgalbu/adonis5-jwt/issues"
+    "url": "https://github.com/umatch-oficial/adonis5-jwt/issues"
   },
   "keywords": [
     "adonis",
